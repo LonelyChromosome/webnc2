@@ -2,7 +2,16 @@
 
 Bản viết lại của WEBNC bằng Express.js.
 
-Chức năng và route giữ tương ứng với WEBNC:
+Database là file riêng trong project:
+
+```text
+backend/data/db.json
+```
+
+Không cần MySQL Server, không cần port 3306.
+
+## Chức năng
+
 - Trang chủ: `/`, `/intro`
 - Liên hệ: `/contact`, `/about`
 - Danh sách/chi tiết tin: `/news`, `/news/:id`
@@ -12,7 +21,7 @@ Chức năng và route giữ tương ứng với WEBNC:
 - Xóa bài: `GET /delete?id=...`
 - API JSON: `/api/news`
 
-Backend dùng Express.js, EJS và MySQL2.
+Toàn bộ thêm/sửa/xóa/tìm kiếm đều đọc và ghi trực tiếp vào `backend/data/db.json`.
 
 ## Chạy
 
@@ -26,17 +35,3 @@ Server mặc định:
 ```text
 http://localhost:3000
 ```
-
-Khởi tạo database bằng file:
-
-```text
-database/init.sql
-```
-
-Cấu hình MySQL mặc định:
-- host: localhost
-- user: root
-- password: 123456
-- database: newsdb
-
-Có thể thay bằng biến môi trường `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`.
