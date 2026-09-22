@@ -1,65 +1,42 @@
-# WEBNC2
+# webnc2
 
-Project web sử dụng Node.js + Express.js framework.
+Bản viết lại của WEBNC bằng Express.js.
 
-## Cấu trúc
+Chức năng và route giữ tương ứng với WEBNC:
+- Trang chủ: `/`, `/intro`
+- Liên hệ: `/contact`, `/about`
+- Danh sách/chi tiết tin: `/news`, `/news/:id`
+- Tìm kiếm: `/search`
+- Thêm bài: `GET/POST /create`
+- Sửa bài: `GET/POST /edit`
+- Xóa bài: `GET /delete?id=...`
+- API JSON: `/api/news`
 
-```text
-webnc2/
-├── controllers/
-│   ├── apiController.js
-│   └── homeController.js
-├── routes/
-│   ├── api.js
-│   └── web.js
-├── public/
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   └── app.js
-│   ├── index.html
-│   └── 404.html
-├── app.js
-├── server.js
-└── package.json
-```
+Backend dùng Express.js, EJS và MySQL2.
 
-Express được dùng để:
-- Khởi tạo web application.
-- Quản lý route.
-- Tách controller xử lý request/response.
-- Phục vụ file frontend tĩnh.
-- Tạo REST API.
-
-## Chạy local
-
-Cần Node.js và npm:
+## Chạy
 
 ```bash
 npm install
 npm start
 ```
 
-Mở:
+Server mặc định:
 
 ```text
 http://localhost:3000
 ```
 
-API test:
+Khởi tạo database bằng file:
 
 ```text
-http://localhost:3000/api/status
+database/init.sql
 ```
 
-## Chạy bằng Node trực tiếp
+Cấu hình MySQL mặc định:
+- host: localhost
+- user: root
+- password: 123456
+- database: newsdb
 
-Sau khi dependencies đã được cài một lần:
-
-```bash
-node server.js
-```
-
-## GitHub
-
-Source có thể lưu và đồng bộ bình thường trên GitHub. GitHub Pages không chạy được Express backend; để chạy online cần môi trường hỗ trợ Node.js hoặc Codespaces.
+Có thể thay bằng biến môi trường `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`.
