@@ -1,10 +1,8 @@
-const { db } = require("../config/db");
+const database = require("../services/fileDatabase");
 
 async function list(req, res, next) {
   try {
-    const [newsList] = await db.query(
-      "SELECT * FROM posts ORDER BY id DESC LIMIT 10"
-    );
+    const newsList = await database.getLatest(10);
 
     res.render("news", {
       id: "",
@@ -17,15 +15,11 @@ async function list(req, res, next) {
 
 async function detail(req, res, next) {
   try {
-    const id = req.params.id;
-    const [newsList] = await db.query(
-      "SELECT * FROM posts WHERE id = ?",
-      [id]
-    );
+    const post = await database.findById(req.params.id);
 
     res.render("news", {
-      id,
-      newsList
+      id: req.params.id,
+      newsList: post ? [post] : []
     });
   } catch (error) {
     next(error);
@@ -35,14 +29,9 @@ async function detail(req, res, next) {
 async function search(req, res, next) {
   try {
     const keyword = req.query.keyword || "";
-    let newsList = [];
-
-    if (keyword) {
-      [newsList] = await db.query(
-        "SELECT * FROM posts WHERE title LIKE ? OR description LIKE ?",
-        [`%${keyword}%`, `%${keyword}%`]
-      );
-    }
+    const newsList = keyword
+      ? await database.search(keyword)
+      : [];
 
     res.render("search", {
       keyword,
@@ -59,9 +48,9 @@ function showCreate(req, res) {
 
 async function create(req, res, next) {
   try {
-    await db.query(
-      "INSERT INTO posts(title, description) VALUES (?, ?)",
-      [req.body.title, req.body.description]
+    await database.createPost(
+      req.body.title,
+      req.body.description
     );
 
     res.redirect("/news");
@@ -72,13 +61,7 @@ async function create(req, res, next) {
 
 async function showEdit(req, res, next) {
   try {
-    const id = req.query.id;
-    const [rows] = await db.query(
-      "SELECT * FROM posts WHERE id = ?",
-      [id]
-    );
-
-    const post = rows.length > 0 ? rows[0] : null;
+    const post = await database.findById(req.query.id);
     res.render("edit", { post });
   } catch (error) {
     next(error);
@@ -87,9 +70,10 @@ async function showEdit(req, res, next) {
 
 async function edit(req, res, next) {
   try {
-    await db.query(
-      "UPDATE posts SET title = ?, description = ? WHERE id = ?",
-      [req.body.title, req.body.description, req.body.id]
+    await database.updatePost(
+      req.body.id,
+      req.body.title,
+      req.body.description
     );
 
     res.redirect("/news/" + req.body.id);
@@ -100,11 +84,7 @@ async function edit(req, res, next) {
 
 async function remove(req, res, next) {
   try {
-    await db.query(
-      "DELETE FROM posts WHERE id = ?",
-      [req.query.id]
-    );
-
+    await database.deletePost(req.query.id);
     res.redirect("/news");
   } catch (error) {
     next(error);
