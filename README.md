@@ -1,14 +1,41 @@
 # WEBNC2
 
-Project web cơ bản sử dụng Node.js và Express.js.
+Project web sử dụng Node.js + Express.js framework.
+
+## Cấu trúc
+
+```text
+webnc2/
+├── controllers/
+│   ├── apiController.js
+│   └── homeController.js
+├── routes/
+│   ├── api.js
+│   └── web.js
+├── public/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── app.js
+│   ├── index.html
+│   └── 404.html
+├── app.js
+├── server.js
+└── package.json
+```
+
+Express được dùng để:
+- Khởi tạo web application.
+- Quản lý route.
+- Tách controller xử lý request/response.
+- Phục vụ file frontend tĩnh.
+- Tạo REST API.
 
 ## Chạy local
 
-Yêu cầu Node.js 18 trở lên.
+Cần Node.js và npm:
 
 ```bash
-git clone https://github.com/LonelyChromosome/webnc2.git
-cd webnc2
 npm install
 npm start
 ```
@@ -19,23 +46,20 @@ Mở:
 http://localhost:3000
 ```
 
-API kiểm tra server:
+API test:
 
 ```text
 http://localhost:3000/api/status
 ```
 
-## Chạy trên GitHub Codespaces
+## Chạy bằng Node trực tiếp
 
-1. Mở repository trên GitHub.
-2. Chọn Code > Codespaces > Create codespace on main.
-3. Codespaces tự chạy `npm install`.
-4. Chạy:
+Sau khi dependencies đã được cài một lần:
 
 ```bash
-npm start
+node server.js
 ```
 
-Port 3000 sẽ được Codespaces tự forward.
+## GitHub
 
-> GitHub Pages chỉ host web tĩnh và không chạy được Node.js/Express server. Project này chạy trực tiếp trên local hoặc GitHub Codespaces; nếu muốn public 24/7 thì cần deploy backend lên dịch vụ hỗ trợ Node.js.
+Source có thể lưu và đồng bộ bình thường trên GitHub. GitHub Pages không chạy được Express backend; để chạy online cần môi trường hỗ trợ Node.js hoặc Codespaces.
