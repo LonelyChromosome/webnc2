@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tạo tài khoản</title>
+</head>
+<body>
+  <a href="/news" style="position: fixed; top: 12px; right: 16px;">Quay lại tin tức</a>
+
+  <h1>Tạo tài khoản mới</h1>
+
+  <% if (error) { %>
+    <p><%= error %></p>
+  <% } %>
+
+  <% if (success) { %>
+    <p><%= success %></p>
+  <% } %>
+
+  <form method="POST" action="/users/create">
+    <label>Tài khoản:</label><br>
+    <input type="text" name="username" autocomplete="username"><br><br>
+
+    <label>Mật khẩu:</label><br>
+    <input type="password" name="password" autocomplete="new-password"><br><br>
+
+    <button type="submit">Tạo tài khoản</button>
+  </form>
+</body>
+</html>
