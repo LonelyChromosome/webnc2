@@ -2,10 +2,10 @@
   "name": "webnc2",
   "version": "1.0.0",
   "description": "WEBNC rebuilt with Express.js and JSON file database",
-  "main": "backend/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "node backend/server.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "engines": {
     "node": ">=18"
