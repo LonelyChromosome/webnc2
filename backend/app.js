@@ -37,7 +37,11 @@ app.use((error, req, res, next) => {
   res
     .status(500)
     .type("html")
-    .send("<h1>Lỗi kết nối hoặc truy vấn database</h1>");
+    .send(
+      "<h1>Lỗi xử lý dữ liệu</h1><p>" +
+        String(error.message || "Unknown error") +
+        "</p>"
+    );
 });
 
 module.exports = app;
