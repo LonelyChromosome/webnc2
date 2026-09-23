@@ -34,6 +34,7 @@ app.use((req, res) => {
 
 app.use((error, req, res, next) => {
   console.error(error);
+
   res
     .status(500)
     .type("html")
