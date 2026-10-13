@@ -1,7 +1,7 @@
 {
-  "name": "lab-lr2-function-component",
+  "name": "webnc2-react-labs",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
