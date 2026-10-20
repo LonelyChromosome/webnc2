@@ -1,0 +1,25 @@
+name: Labs smoke test
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Run backend tests
+        run: npm test
+      - name: Build React frontend
+        run: npm --prefix react-news-frontend run build
+      - name: Exercise HTTP endpoints
+        run: |
+          node server.js &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          node -e 'async function run(){let r; for(let i=0;i<40;i++){try{r=await fetch("http://localhost:3000/api/posts");break}catch{await new Promise(x=>setTimeout(x,250))}} if(!r||!r.ok)throw Error("GET posts failed");const posts=await r.json();if(!posts.success||!Array.isArray(posts.data))throw Error("Incorrect list format");const s=await fetch("http://localhost:3000/api/posts/search?keyword=node");if(!s.ok||!(await s.json()).success)throw Error("Search failed");const denied=await fetch("http://localhost:3000/api/posts",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({title:"x",description:"y"})});if(denied.status!==401)throw Error("Guest write must be denied");const me=await fetch("http://localhost:3000/api/auth/me");if(me.status!==401)throw Error("Guest should not be logged in");const old=await fetch("http://localhost:3000/news");if(!old.ok)throw Error("Legacy news view failed");console.log("HTTP smoke OK")}run().catch(e=>{console.error(e);process.exit(1)})'
