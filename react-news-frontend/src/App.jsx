@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import api from "./api";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import PostListPage from "./pages/PostListPage";
 import PostDetailPage from "./pages/PostDetailPage";
@@ -9,11 +10,18 @@ import CreatePostPage from "./pages/CreatePostPage";
 import EditPostPage from "./pages/EditPostPage";
 import LoginPage from "./pages/LoginPage";
 import ContactPage from "./pages/ContactPage";
+
+import "./App.css";
+
 function App() {
   const [user, setUser] = useState(null);
+
   useEffect(() => {
-    api.get("/auth/me").then((response) => setUser(response.data.user)).catch(() => {});
+    api.get("/auth/me")
+      .then((response) => setUser(response.data.user))
+      .catch(() => {});
   }, []);
+
   async function logout() {
     try {
       const response = await api.post("/auth/logout");
@@ -24,6 +32,7 @@ function App() {
       alert("Lỗi đăng xuất");
     }
   }
+
   return (
     <>
       <Header user={user} onLogout={logout} />
@@ -38,7 +47,9 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </main>
+      <Footer />
     </>
   );
 }
+
 export default App;
