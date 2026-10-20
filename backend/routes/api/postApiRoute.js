@@ -1,0 +1,10 @@
+const router = require("express").Router();
+const api = require("../../controllers/api/postApiController");
+const { requireApiLogin } = require("../../middlewares/authMiddleware");
+router.get("/", api.index);
+router.get("/search", api.search);
+router.get("/:id", api.show);
+router.post("/", requireApiLogin, api.store);
+router.put("/:id", requireApiLogin, api.update);
+router.delete("/:id", requireApiLogin, api.destroy);
+module.exports = router;
