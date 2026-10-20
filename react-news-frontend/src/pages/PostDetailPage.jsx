@@ -1,13 +1,36 @@
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import api from "../api";
-export default function PostDetailPage({ user }) {
+function PostDetailPage({ user }) {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  useEffect(() => { let active = true; setLoading(true); setError(""); api.get("/posts/" + id).then(r => { if (active) setPost(r.data.data); }).catch(e => { if (active) setError(e.response?.data?.message || "Không tải được bài viết"); }).finally(() => { if (active) setLoading(false); }); return () => { active = false; }; }, [id]);
-  if (loading) return <section className="panel">Đang tải dữ liệu...</section>;
-  if (error) return <section className="panel"><p role="alert" className="error">{error}</p><Link to="/posts">Quay lại danh sách</Link></section>;
-  return <article className="panel detail"><span className="eyebrow">BÀI VIẾT #{post.id}</span><h1>{post.title}</h1><p>{post.description}</p><div className="actions"><Link to="/posts">← Danh sách</Link>{user && <Link to={"/posts/" + id + "/edit"}>Sửa bài viết</Link>}</div></article>;
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    async function loadPost() {
+      try {
+        setLoading(true);
+        const response = await api.get(`/posts/${id}`);
+        setPost(response.data.data);
+      } catch (err) {
+        console.error(err);
+        setError("Lỗi tải chi tiết bài viết");
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPost();
+  }, [id]);
+  if (loading) return <h3>Đang tải dữ liệu...</h3>;
+  if (error) return <h3>{error}</h3>;
+  if (!post) return <div><h2>Không tìm thấy bài viết</h2><Link to="/posts">Quay lại danh sách</Link></div>;
+  return (
+    <div>
+      <h2>{post.title}</h2>
+      <p>{post.description}</p>
+      {user && <Link to={`/posts/${post.id}/edit`}>Sửa bài viết</Link>}
+      <br /><Link to="/posts">Quay lại danh sách</Link>
+    </div>
+  );
 }
+export default PostDetailPage;
